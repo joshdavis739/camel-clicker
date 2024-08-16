@@ -10,11 +10,11 @@ export class AppComponent {
   title = 'camel-clicker';
 
   constructor() {
+    this.points$.next(Number(localStorage.getItem('points')));
     this.canBuyHand$ = this.points$.pipe(map(x => x >= this.hand.cost));
     this.canBuyFoot$ = this.points$.pipe(map(x => x >= this.foot.cost));
+
     interval(1000).pipe(tap(x => this.points$.next(this.points$.value + this.totalCps()))).subscribe();
-
-
 
     var myAudio = new Audio('../assets/Not ready to camel.mp3');
     myAudio.addEventListener('timeupdate', function(){
@@ -25,6 +25,13 @@ export class AppComponent {
       }
     });
     myAudio.play();
+
+    this.hand.amount = Number(localStorage.getItem('handAmount'));
+    var handCost = localStorage.getItem('handCost')
+    if (handCost) this.hand.cost = Number(handCost);
+    this.foot.amount = Number(localStorage.getItem('footAmount'));
+    var footCost = localStorage.getItem('footCost')
+    if (footCost) this.hand.cost = Number(footCost);
   }
 
   public points$ = new BehaviorSubject<number>(0);
@@ -35,7 +42,7 @@ export class AppComponent {
 
 
   public onCamelClick() {
-      this.points$.next(this.points$.value + 1);
+      this.setPoints(this.points$.value + 1);
       this.clickCount++;
       console.log(this.clickCount);
       this.isSpinning = true;
@@ -50,6 +57,8 @@ export class AppComponent {
     this.points$.next(this.points$.value - this.hand.cost);
     this.hand.amount++;
     this.hand.cost += this.hand.costIncrease;
+    localStorage.setItem('handAmount', String(this.hand.amount));
+    localStorage.setItem('handCost', String(this.hand.cost));
   }
 
   public buyFoot() {
@@ -60,10 +69,17 @@ export class AppComponent {
     this.points$.next(this.points$.value - this.foot.cost);
     this.foot.amount++;
     this.foot.cost += this.foot.costIncrease;
+    localStorage.setItem('footAmount', String(this.foot.amount));
+    localStorage.setItem('footCost', String(this.foot.cost));
   }
 
   public totalCps() {
     return this.hand.amount * this.hand.cps + this.foot.amount * this.foot.cps;
+  }
+
+  public setPoints(points: number) {
+    this.points$.next(points);
+    localStorage.setItem('points', String(points));
   }
 
   public hand: Item = {
@@ -85,7 +101,7 @@ export class AppComponent {
 
 export interface Item {
   name: string;
-  amount: 0;
+  amount: number;
   cost: number;
   cps: number;
   costIncrease: number;
