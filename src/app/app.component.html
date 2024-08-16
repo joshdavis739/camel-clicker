@@ -1,9 +1,12 @@
 <div class="container">
   <button class="camel__click" (click)="onCamelClick()">
-    <img [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
+    <img [ngStyle]="{'animation-duration': clickCount}" [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
   </button>
 
   <div>Cash money:<span>{{points$ | async}}</span></div>
+  <div>Click the camel to make it spin!</div>
+  <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
+
 
 <button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}}) x{{this.hand.amount}}</button>
 <button (click)="buyFoot()" [disabled]="(canBuyFoot$ | async) === false">Buy foot (Cost: {{this.foot.cost}}) x{{this.foot.amount}}</button>

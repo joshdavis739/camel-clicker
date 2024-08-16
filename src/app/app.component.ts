@@ -35,18 +35,21 @@ export class AppComponent {
   }
 
   public points$ = new BehaviorSubject<number>(0);
-  public canBuyHand$: Observable<boolean>
+  public canBuyHand$: Observable<boolean>;
   public canBuyFoot$: Observable<boolean>;
   public isSpinning: boolean = false;
   public clickCount: number = 0;
 
-
   public onCamelClick() {
-      this.setPoints(this.points$.value + 1);
-      this.clickCount++;
-      console.log(this.clickCount);
-      this.isSpinning = true;
-      setTimeout(() => this.isSpinning = false, 1000 * this.clickCount); // Spin based on click count
+    this.points$.next(this.points$.value + 1);
+    this.isSpinning = true;
+    this.clickCount++;
+    setTimeout(() => {
+        this.clickCount--;
+        if (this.clickCount === 0) {
+            this.isSpinning = false;
+        }
+    }, 1000 * this.clickCount);
   }
 
   public buyHand() {
@@ -88,7 +91,7 @@ export class AppComponent {
     cost: 10,
     cps: 1,
     costIncrease: 1
-  }
+  };
 
   public foot: Item = {
     name: "Foot",
@@ -96,7 +99,7 @@ export class AppComponent {
     cost: 20,
     cps: 2,
     costIncrease: 2
-  }
+  };
 }
 
 export interface Item {
