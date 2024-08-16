@@ -20,10 +20,58 @@ html, body {
 }
 
 
+
+
+.camel__click{
+  --d: 5em; /* image size */
+  --rel: 1; /* how much extra space we want between images, 1 = one image size */
+  --r: calc(.6*(1 + var(--rel))*var(--d)/var(--tan)); /* circle radius */
+  --s: calc(2*var(--r) + var(--d)); /* container size */
+  position: relative;
+  // z-index:
+  overflow:visible;
+}
+
+.camel__click .item {
+  position: absolute;
+  top: 50%; left: 50%;
+  margin: calc(-.5*var(--d));
+  width: var(--d); height: var(--d);
+  --az: calc(var(--i)*1turn/var(--m));
+  transform:
+    rotate(var(--az))
+    translate(var(--r));
+  height: 3rem; width: 3rem;
+  z-index: 0;
+
+  animation: moveInOut 2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.3s); /* Stagger the start time */
+}
+
+@keyframes moveInOut {
+  0%, 100% {
+    transform:
+      rotate(var(--az))
+      translate(var(--r))
+ ;
+  }
+  50% {
+    transform:
+      rotate(var(--az))
+      translate(calc(var(--r) * 1.2)) /* Adjust multiplier for desired effect */
+     ;
+  }
+}
+
+.camel {
+  z-index: 99;
+}
+
 * {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
   color: white;
   z-index: 5;
+  overflow: hidden;
 }
 
 .container {
