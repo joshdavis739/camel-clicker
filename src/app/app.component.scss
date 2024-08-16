@@ -6,7 +6,7 @@
 }
 
 .spinning {
-  animation: spin 1s linear;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -22,6 +22,8 @@ html, body {
 
 * {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+  color: white;
+  z-index: 5;
 }
 
 .container {
