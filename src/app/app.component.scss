@@ -80,6 +80,7 @@ html, body {
   align-items: center;
   justify-content: center;
   text-align: center;
+  position: relative;
 
 
   // DONT TOUCH THIS
@@ -99,6 +100,28 @@ html, body {
   height:100vh;
 }
 
+.cash-money-counter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-size: 4rem;
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center; // This will center the text vertically
+  justify-content: center; // This will center the text horizontally
+
+
+
+
+  img {
+    height: 6rem;
+    width: 6rem;
+    margin-right: 1rem;
+    display: inline-block;
+  }
+}
+
 .right-panel {
   grid-column: 2;
   height: 100%;
@@ -106,8 +129,6 @@ html, body {
   padding-left: 2rem;
   padding-right: 2rem;
   z-index: 5;
-
-
 
   // DONT TOUCH THIS
   // From https://projects.verou.me/css3patterns/#stairs
