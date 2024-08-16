@@ -47,6 +47,8 @@ export class AppComponent {
     if (footCps) this.foot.cps = Number(footCps);
     var footUpgradeCost = localStorage.getItem('footUpgradeCost')
     if (footUpgradeCost) this.foot.upgradeCost = Number(footUpgradeCost);
+
+    interval(1000).subscribe(() => this.checkInactivity());
   }
 
   public points$ = new BehaviorSubject<number>(0);
@@ -79,6 +81,13 @@ export class AppComponent {
             this.isSpinning = false;
         }
     }, 1000 * this.clickCount);
+  }
+
+  private checkInactivity() {
+    const currentTime = Date.now();
+    if (currentTime - this.lastClickTime > 5000) { // 5 seconds of inactivity
+      this.spinDuration = 3; // Set spin duration to 3 second
+    }
   }
 
   public buyHand() {
