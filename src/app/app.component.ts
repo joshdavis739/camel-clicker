@@ -23,7 +23,7 @@ export class AppComponent {
           this.currentTime = 0
           this.play()
       }
-  });
+    });
     myAudio.play();
   }
 
