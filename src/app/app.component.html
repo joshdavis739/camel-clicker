@@ -1,9 +1,38 @@
-<div class="container">
-  <button class="camel__click" (click)="onCamelClick()">
-    <img [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
-  </button>
+<div class="everything">
+  <div class="container">
+    <button class="camel__click" (click)="onCamelClick()">
+      <img [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
+    </button>
 
-  <div>Cash money:<span>{{points$ | async}}</span></div>
+    <div>Cash money:<span>{{points$ | async}}</span></div>
+  </div>
 
-<button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}}) x{{this.hand.amount}}</button>
-<button (click)="buyFoot()" [disabled]="(canBuyFoot$ | async) === false">Buy foot (Cost: {{this.foot.cost}}) x{{this.foot.amount}}</button>
+  <div class="right-panel">
+    <h2>Upgrades</h2>
+    <ul class="upgrades-list">
+      <li class="upgrade-list__upgrade">
+        <button class="upgrade__button" (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">
+          <div class="upgrade-button__title">
+            Hand
+          </div>
+          <div class="upgrade-button__cost">
+            Cost: {{this.hand.cost}}
+          </div>
+        </button>
+        <div class="upgrade__count" >{{this.hand.amount}}</div>
+      </li>
+      <li class="upgrade-list__upgrade">
+        <button class="upgrade__button" (click)="buyFoot()" [disabled]="(canBuyFoot$ | async) === false">
+          <div class="upgrade-button__title">
+            Foot
+          </div>
+          <div class="upgrade-button__cost">
+            Cost: {{this.foot.cost}}
+          </div>
+        </button>
+        <div  class="upgrade__count">{{this.foot.amount}}</div>
+      </li>
+    </ul>
+  </div>
+</div>
+

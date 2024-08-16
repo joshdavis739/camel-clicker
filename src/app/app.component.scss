@@ -15,13 +15,12 @@
 
 html, body {
   height: 100%;
-  margin: 0;
+  margin: 0 !important;
 }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+* {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
 
 .container {
@@ -30,4 +29,58 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.everything {
+  display: grid;
+  grid-template-columns: 75% 25%;
+  height:100vh;
+}
+
+.right-panel {
+  grid-column: 2;
+  height: 100%;
+  background-color:red;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.upgrades-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.upgrade-list__upgrade + .upgrade-list__upgrade {
+  margin-top: 2rem;
+}
+
+.upgrade-list__upgrade {
+  height: 4rem;
+  line-height: 4rem;
+}
+
+.upgrade__button {
+  vertical-align: top;
+  height: 4rem;
+  display: inline-block;
+  width: calc(100% - 4rem);
+  top: 0;
+}
+
+.upgrade__count {
+  width: 4rem;
+  display: inline-block;
+  line-height: 4rem;
+  font-size: 4rem;
+  height: 4rem;
+  text-align: center;
+}
+
+.upgrade-button__title {
+  text-align: left;
+  font-size: 1.5rem
+}
+
+.upgrade-button__cost {
+  text-align: left;
 }
