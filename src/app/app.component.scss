@@ -259,7 +259,19 @@ html, body {
   }
 }
 
+.power-up {
+  z-index: 9999;
+  position: absolute;
+}
 
+.power__click {
+  background-color: transparent;
+  border: none;
+}
+
+.power-up-img {
+  height: 8rem;
+}
 
 @keyframes move-background {
   from {

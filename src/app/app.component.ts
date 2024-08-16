@@ -90,6 +90,16 @@ export class AppComponent implements OnInit {
     if (aiUpgradeCost) this.ai.upgradeCost = Number(aiUpgradeCost);
 
     interval(1000).subscribe(() => this.checkInactivity());
+
+    interval(2000).subscribe(() => {
+      if (!this.isPowerUp && Math.random() < 0.1)
+      {
+        this.isPowerUpAppear = true;
+        setTimeout(() => {
+          this.isPowerUpAppear = false;
+        }, 3000);
+      }
+      });
   }
   ngOnInit(): void {
     this.achievementService.onAchivemint.pipe(tap(x => {
@@ -137,6 +147,10 @@ export class AppComponent implements OnInit {
   public clickSpeed: number = 0;
   public spinDuration: number = 1;
   private lastClickTime: number = 0;
+  public isPowerUp: boolean = false;
+  public isPowerUpAppear: boolean = false;
+  public poewrUpIconLeft: number = 10;
+  public poewrUpIconTop: number = 40;
 
   public onCamelClick() {
     this.myAudio.play();
@@ -173,6 +187,23 @@ export class AppComponent implements OnInit {
             this.isSpinning = false;
         }
     }, 1000 * this.clickCount);
+  }
+
+  public onPowerUpClick() {
+    this.isPowerUpAppear = false;
+    
+    if (this.isPowerUp) {
+      return;
+    }
+
+    this.poewrUpIconLeft = Math.floor(Math.random() * 80);
+    this.poewrUpIconTop = Math.floor(Math.random() * 80);
+
+    this.isPowerUp = true;
+
+    setTimeout(() => {
+        this.isPowerUp = false;
+    }, 15000);
   }
 
   private checkInactivity() {
@@ -272,10 +303,15 @@ export class AppComponent implements OnInit {
   }
 
   public totalCps() {
+    var cps = this.hand.amount * this.hand.cps + this.engineer.amount * this.engineer.cps
     if (this.isSpinning) {
-      return (this.hand.amount * this.hand.cps + this.engineer.amount * this.engineer.cps) * 2;
+      cps *= 2;
     }
-    return this.hand.amount * this.hand.cps + this.engineer.amount * this.engineer.cps;
+    if (this.isPowerUp)
+    {
+      cps *= 2;
+    }
+    return cps;
   }
 
   public setPoints(points: number) {

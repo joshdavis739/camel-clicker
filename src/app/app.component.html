@@ -1,7 +1,11 @@
 <div class="everything">
   <div class="container">
+    <div *ngIf="isPowerUpAppear" class="power-up" [ngStyle]="{'left': poewrUpIconLeft + '%', 'top': poewrUpIconTop + '%'}">
+      <button class="power__click" (click)="onPowerUpClick()" alt="Power Up">
+        <img class="power-up-img" src="../assets/power-up.svg"  />
+      </button>
+    </div>
     <div class="background-container">
-
       <div class="stars"></div>
       <div class="twinkling"></div>
       <div class="clouds"></div>
@@ -18,6 +22,7 @@
 
     <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
     <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
+    <div *ngIf="isPowerUp">POWER!!!!</div>
 
     <div @enterAnimation class="achievement-toast" *ngIf="showAchiement$ | async" (click)="onachclick()">
       <div class="achievement-toast__title">Achievement get!</div>
