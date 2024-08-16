@@ -1,15 +1,47 @@
-<div class="container">
-  <button class="camel__click" (click)="onCamelClick()">
-    <img [ngStyle]="{'animation-duration': spinDuration + 's'}" [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
-  </button>
+<div class="everything">
+  <div class="container">
+    <div class="background-container">
 
-  <div>Cash money:<span>{{points$ | async}}</span></div>
-  <div>Click the camel to make it spin!</div>
-  <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
-  <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
+      <div class="stars"></div>
+      <div class="twinkling"></div>
+      <div class="clouds"></div>
+    </div>
 
+    <button class="camel__click" (click)="onCamelClick()">
+      <img [ngStyle]="{'animation-duration': spinDuration + 's'}" [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
+    </button>
 
-<button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}}) x{{this.hand.amount}}</button>
-<button (click)="upgradeHand()" [disabled]="(canUpgradeHand$ | async) === false">Upgrade hand (Cost: {{this.hand.upgradeCost}}) Lv:{{this.hand.level}} CPS:{{this.hand.cps}}</button>
-<button (click)="buyFoot()" [disabled]="(canBuyFoot$ | async) === false">Buy foot (Cost: {{this.foot.cost}}) x{{this.foot.amount}}</button>
-<button (click)="upgradeFoot()" [disabled]="(canUpgradeFoot$ | async) === false">Upgrade foot (Cost: {{this.foot.upgradeCost}}) Lv:{{this.foot.level}} CPS:{{this.foot.cps}}</button>
+    <div>Cash money:<span>{{points$ | async}}</span></div>
+    <div>Click the camel to make it spin!</div>
+    <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
+    <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
+    </div>
+
+  <div class="right-panel">
+    <h2 class="right-panel__title">Upgrades</h2>
+    <ul class="upgrades-list">
+      <li class="upgrade-list__upgrade">
+        <button class="upgrade__button" (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">
+          <div class="upgrade-button__title">
+            Hand
+          </div>
+          <div class="upgrade-button__cost">
+            Cost: {{this.hand.cost}}
+          </div>
+        </button>
+        <div class="upgrade__count" >{{this.hand.amount}}</div>
+      </li>
+      <li class="upgrade-list__upgrade">
+        <button class="upgrade__button" (click)="buyFoot()" [disabled]="(canBuyFoot$ | async) === false">
+          <div class="upgrade-button__title">
+            Foot
+          </div>
+          <div class="upgrade-button__cost">
+            Cost: {{this.foot.cost}}
+          </div>
+        </button>
+        <div  class="upgrade__count">{{this.foot.amount}}</div>
+      </li>
+    </ul>
+  </div>
+</div>
