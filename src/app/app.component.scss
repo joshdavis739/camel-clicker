@@ -162,6 +162,7 @@ html, body {
   padding-left: 2rem;
   padding-right: 2rem;
   z-index: 5;
+  overflow-y: scroll;
 
   // DONT TOUCH THIS
   // From https://projects.verou.me/css3patterns/#stairs
@@ -203,7 +204,7 @@ html, body {
   color: white;
   background-color: black;
   border-radius: 4px;
-  border-style: none;
+  border: 2px solid white;
 
   &:disabled {
     color: rgba(255, 255, 255, 0.5);
@@ -215,11 +216,6 @@ html, body {
       cursor: pointer;
     }
   }
-}
-
-.achievement-container {
-  height: 2rem;
-  width: 100%;
 }
 
 .upgrade__count {
@@ -337,6 +333,41 @@ html, body {
   -webkit-animation:move-background 70s linear infinite;
   animation:move-background 70s linear infinite;
 
+}
+
+.achievement-container {
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 2.5rem;
+  padding: 0.5rem;
+  width: calc(100% - 2rem);
+  border-radius: 4px;
+  border: 2px solid white;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.achievement-container + .achievement-container {
+  margin-top: 1rem;
+}
+
+.achievement-container--unlocked {
+  background-color: #dea45d;
+
+  .achievement__subtitle,
+  .achievement__title {
+    color: black;
+  }
+}
+
+.achievement__title  {
+  font-size: 1.2rem;
+}
+
+.achievement__subtitle{
+  font-size: 0.8rem;
 }
 
 .clouds{

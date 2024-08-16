@@ -107,6 +107,21 @@ export class AppComponent implements OnInit {
       if (x > 100) {
         this.achievementService.ensureAchiement('100');
       }
+      if (x > 10000) {
+        this.achievementService.ensureAchiement('10000');
+      }
+      if (x > 1000000) {
+        this.achievementService.ensureAchiement('1000000');
+      }
+      if (x > 100000000) {
+        this.achievementService.ensureAchiement('100000000');
+      }
+      if (x > 10000000000) {
+        this.achievementService.ensureAchiement('10000000000');
+      }
+      if (x > 1000000000000) {
+        this.achievementService.ensureAchiement('1000000000000');
+      }
     })).subscribe();
   }
 
@@ -177,6 +192,11 @@ export class AppComponent implements OnInit {
     this.hand.cost = Math.round(this.hand.cost * 1.15);
     localStorage.setItem('handAmount', String(this.hand.amount));
     localStorage.setItem('handCost', String(this.hand.cost));
+
+    this.achievementService.ensureAchiement('handy');
+    if (this.hand.amount > 99) {
+      this.achievementService.ensureAchiement('light-work');
+    }
   }
 
   public buyEngineer() {
