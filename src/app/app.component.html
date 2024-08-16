@@ -1,8 +1,9 @@
-<button class="camel__click" (click)="onCamelClick()">
+<div class="container">
+  <button class="camel__click" (click)="onCamelClick()">
+    <img [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
+  </button>
 
-  <div style="transform: rotate(-30deg);">camel</div>
-</button>
+  <div>Cash money:<span>{{points$ | async}}</span></div>
 
-<div>Cash money:<span>{{points$ | async}}</span></div>
-
-<button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}})</button>
+  <button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}})</button>
+</div>
