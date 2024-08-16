@@ -1,15 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, interval, map, Observable, Subject, tap } from 'rxjs';
+import { AchiementService } from './achiement.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    trigger(
+      'enterAnimation', [
+        transition(':enter', [
+          style({transform: 'translateX(100%)', opacity: 0}),
+          animate('300ms ease-in-out', style({transform: 'translateX(0)', opacity: 1}))
+        ]),
+        transition(':leave', [
+          style({transform: 'translateX(0)', opacity: 1}),
+          animate('300ms ease-in-out', style({transform: 'translateX(-100%)', opacity: 0}))
+        ])
+      ]
+    )
+  ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'camel-clicker';
+  myAudio: HTMLAudioElement;
 
-  constructor() {
+  achievementService = inject(AchiementService);
+
+  showAchiement$ = new BehaviorSubject(false);
+  recentAchevemten: string = '';
+
+  onachclick() {
+    this.achievementService.ensureAchiement('click-achiement');
+  }
+
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.points$.next(Number(localStorage.getItem('points')));
 
     this.canBuyHand$ = this.points$.pipe(map(x => x >= this.hand.cost));
@@ -23,15 +50,14 @@ export class AppComponent {
 
     interval(1000).pipe(tap(x => this.setPoints(Math.round(this.points$.value + this.totalCps())))).subscribe();
 
-    var myAudio = new Audio('../assets/Not ready to camel.mp3');
-    myAudio.addEventListener('timeupdate', function(){
+    this.myAudio = new Audio('../assets/Not ready to camel.mp3');
+    this.myAudio.addEventListener('timeupdate', function(){
       var buffer = .44
       if(this.currentTime > this.duration - buffer){
           this.currentTime = 0
           this.play()
       }
     });
-    myAudio.play();
 
     this.hand.amount = Number(localStorage.getItem('handAmount'));
     var handCost = localStorage.getItem('handCost')
@@ -65,6 +91,24 @@ export class AppComponent {
 
     interval(1000).subscribe(() => this.checkInactivity());
   }
+  ngOnInit(): void {
+    this.achievementService.onAchivemint.pipe(tap(x => {
+      this.showAchiement$.next(true);
+      this.recentAchevemten = x.name;
+      setTimeout(() => {
+        this.showAchiement$.next(false);
+      }, 5000)
+
+      this.changeDetectorRef.detectChanges();
+      // this._snackBar.open(x.name, 'Close');
+    })).subscribe();
+
+    this.points$.pipe(tap(x => {
+      if (x > 100) {
+        this.achievementService.ensureAchiement('100');
+      }
+    })).subscribe();
+  }
 
   public points$ = new BehaviorSubject<number>(0);
   public canBuyHand$: Observable<boolean>;
@@ -80,6 +124,9 @@ export class AppComponent {
   private lastClickTime: number = 0;
 
   public onCamelClick() {
+    this.myAudio.play();
+    this.achievementService.ensureAchiement('click-camel');
+
     if (this.isSpinning) {
       this.points$.next(this.points$.value + 2);
     }
@@ -89,6 +136,7 @@ export class AppComponent {
     }
     this.isSpinning = true;
     this.clickCount++;
+
 
     // Calculate click speed
     const currentTime = Date.now();

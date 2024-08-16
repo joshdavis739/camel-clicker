@@ -163,6 +163,11 @@ html, body {
   }
 }
 
+.achievement-container {
+  height: 2rem;
+  width: 100%;
+}
+
 .upgrade__count {
   width: 4rem;
   display: inline-block;
@@ -306,3 +311,27 @@ html, body {
 //   z-index: 3;
 //   right: 20px;
 // }
+
+.achievement-toast {
+  position: absolute;
+  bottom: 2rem;
+  width: 16rem;
+  height: 4rem;
+  border: 2px white solid;
+  background-color: #dea45d;
+  border-radius: 2rem;
+}
+
+.achievement-toast__title {
+  height: 2rem;
+  font-size: 1.5rem;
+  padding-top: 0.5rem;
+  color: black;
+}
+
+.achievement-toast__subtitle {
+  font-size: 1rem;
+  height: 2rem;
+  padding-bottom: 0.5rem;
+  color: black;
+}

@@ -21,7 +21,10 @@
     <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
     <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
 
-
+    <div @enterAnimation class="achievement-toast" *ngIf="showAchiement$ | async" (click)="onachclick()">
+      <div class="achievement-toast__title">Achievement get!</div>
+      <div class="achievement-toast__subtitle">{{recentAchevemten}}</div>
+    </div>
 
   </div>
 
@@ -92,5 +95,16 @@
         </button>
       </li>
     </ul>
+
+    <hr>
+    <div>
+      <ul>
+        <li *ngFor="let achievement of achievementService.achievements">
+          <div class="achievement-container">
+            {{achievement.name}} {{achievement.unlocked}}
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
