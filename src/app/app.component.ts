@@ -61,7 +61,13 @@ export class AppComponent {
   private lastClickTime: number = 0;
 
   public onCamelClick() {
-    this.points$.next(this.points$.value + 1);
+    if (this.isSpinning) {
+      this.points$.next(this.points$.value + 2);
+    }
+    else
+    {
+      this.points$.next(this.points$.value + 1);
+    }
     this.isSpinning = true;
     this.clickCount++;
 
@@ -128,6 +134,9 @@ export class AppComponent {
   }
 
   public totalCps() {
+    if (this.isSpinning) {
+      return (this.hand.amount * this.hand.cps + this.foot.amount * this.foot.cps) * 2;
+    }
     return this.hand.amount * this.hand.cps + this.foot.amount * this.foot.cps;
   }
 
