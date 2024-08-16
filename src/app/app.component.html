@@ -1,5 +1,12 @@
 <div class="everything">
   <div class="container">
+    <div class="background-container">
+
+      <div class="stars"></div>
+      <div class="twinkling"></div>
+      <div class="clouds"></div>
+    </div>
+
     <button class="camel__click" (click)="onCamelClick()">
       <img [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
     </button>
@@ -8,7 +15,7 @@
   </div>
 
   <div class="right-panel">
-    <h2>Upgrades</h2>
+    <h2 class="right-panel__title">Upgrades</h2>
     <ul class="upgrades-list">
       <li class="upgrade-list__upgrade">
         <button class="upgrade__button" (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">
