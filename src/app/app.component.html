@@ -16,13 +16,17 @@
       <img class="camel" [ngStyle]="{'animation-duration': spinDuration + 's'}" [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
     </button>
 
-    <div>Click the camel to make it spin! (Camel earn double cash when spinning!!)</div>
     <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
     <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
 
     <div class="cash-money-counter">
       <img src="../assets/cash-money.png" alt="Cash money" />
       <span>{{points$ | async}}</span>
+    </div>
+
+    <div class="information-icon">
+      <img src="../assets/info.png" alt="Info icon" />
+      <div class="information-bubble">Click the camel to make it spin! (Camel earn double cash when spinning!!)</div>
     </div>
 
   </div>

@@ -111,14 +111,47 @@ html, body {
   align-items: center; // This will center the text vertically
   justify-content: center; // This will center the text horizontally
 
+  img {
+    height: 6rem;
+    width: 6rem;
+    margin-right: 1rem;
+    display: inline-block;
+  }
+}
 
+.information-icon {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  font-size: 1.5rem;
+  //padding: 2rem 1rem;
+  // display: flex;
+  // align-items: center; // This will center the text vertically
+  // justify-content: center; // This will center the text horizontally
+  cursor: pointer;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
 
+  &:hover {
+    width: auto;
+    display: flex;
+    align-items: center; // This will center the text vertically
+    justify-content: center; // This will center the text horizontally
+  }
 
   img {
     height: 6rem;
     width: 6rem;
     margin-right: 1rem;
     display: inline-block;
+  }
+
+  .information-bubble {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 2rem;
+    padding: 1rem;
+    color: #000;
   }
 }
 
