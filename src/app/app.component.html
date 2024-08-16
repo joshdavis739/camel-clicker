@@ -5,4 +5,5 @@
 
 <div>Cash money:<span>{{points$ | async}}</span></div>
 
-<button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}})</button>
+<button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}}) x{{this.hand.amount}}</button>
+<button (click)="buyFoot()" [disabled]="(canBuyFoot$ | async) === false">Buy foot (Cost: {{this.foot.cost}}) x{{this.foot.amount}}</button>
