@@ -14,7 +14,7 @@ export class AppComponent {
     this.canBuyHand$ = this.points$.pipe(map(x => x >= this.hand.cost));
     this.canBuyFoot$ = this.points$.pipe(map(x => x >= this.foot.cost));
 
-    interval(1000).pipe(tap(x => this.points$.next(this.points$.value + this.totalCps()))).subscribe();
+    interval(1000).pipe(tap(x => this.setPoints(this.points$.value + this.totalCps()))).subscribe();
 
     var myAudio = new Audio('../assets/Not ready to camel.mp3');
     myAudio.addEventListener('timeupdate', function(){
