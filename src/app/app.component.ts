@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, interval, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, interval, map, Observable, Subject, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +7,15 @@ import { BehaviorSubject, interval, Observable, Subject, tap } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
   title = 'camel-clicker';
 
+  constructor() {
+    this.canBuyHand$ = this.points$.pipe(map(x => x > this.hand.cost));
+  }
+
+
   public points$ = new BehaviorSubject<number>(0);
+  public canBuyHand$: Observable<boolean>;
 
   public onCamelClick() {
     this.points$.next(this.points$.value + 1);

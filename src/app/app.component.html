@@ -1,5 +1,8 @@
-<button class="camel__click" (click)="onCamelClick()"></button>
+<button class="camel__click" (click)="onCamelClick()">
 
-<span>Cash money:<span>{{points$ | async}}</span></span>
+  <div style="transform: rotate(-30deg);">camel</div>
+</button>
 
-<button (click)="buyHand()">Buy hand</button>
+<div>Cash money:<span>{{points$ | async}}</span></div>
+
+<button (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">Buy hand (Cost: {{this.hand.cost}})</button>
