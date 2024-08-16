@@ -142,6 +142,12 @@ export class AppComponent implements OnInit {
     const currentTime = Date.now();
     if (this.lastClickTime !== 0) {
       this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
+      if (this.clickSpeed > 15) {
+        this.achievementService.ensureAchiement('click-sonic');
+      }
+      if (this.clickSpeed > 100) {
+        this.achievementService.ensureAchiement('cheater');
+      }
       this.spinDuration = 1 / this.clickSpeed;
     }
     this.lastClickTime = currentTime;

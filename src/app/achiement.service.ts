@@ -41,6 +41,16 @@ export class AchiementService {
       key: 'click-achiement',
       name: 'Click the achievement pop-up',
       unlocked: false
+    },
+    {
+      key: 'click-sonic',
+      name: 'Reach click speed > 15',
+      unlocked: false
+    },
+    {
+      key: 'cheater',
+      name: 'You\'re definitely cheating',
+      unlocked: false
     }
   ]
 }
