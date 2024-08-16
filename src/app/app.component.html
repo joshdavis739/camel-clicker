@@ -1,3 +1,5 @@
-<button class="camel" (click)="onClick()"></button>
+<button class="camel__click" (click)="onCamelClick()"></button>
 
-<div>{{points$ | async}}</div>
+<span>Cash money:<span>{{points$ | async}}</span></span>
+
+<button (click)="buyHand()">Buy hand</button>
