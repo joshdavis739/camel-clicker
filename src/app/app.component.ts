@@ -11,10 +11,15 @@ export class AppComponent {
 
   constructor() {
     this.points$.next(Number(localStorage.getItem('points')));
+
     this.canBuyHand$ = this.points$.pipe(map(x => x >= this.hand.cost));
-    this.canBuyFoot$ = this.points$.pipe(map(x => x >= this.foot.cost));
     this.canUpgradeHand$ = this.points$.pipe(map(x => x >= this.hand.upgradeCost));
-    this.canUpgradeFoot$ = this.points$.pipe(map(x => x >= this.foot.upgradeCost));
+
+    this.canBuyEngineer$ = this.points$.pipe(map(x => x >= this.engineer.cost));
+    this.canUpgradeEngineer$ = this.points$.pipe(map(x => x >= this.engineer.upgradeCost));
+
+    this.canBuyAi$ = this.points$.pipe(map(x => x >= this.ai.cost));
+    this.canUpgradeAi$ = this.points$.pipe(map(x => x >= this.ai.upgradeCost));
 
     interval(1000).pipe(tap(x => this.setPoints(Math.round(this.points$.value + this.totalCps())))).subscribe();
 
@@ -38,22 +43,36 @@ export class AppComponent {
     var handUpgradeCost = localStorage.getItem('handUpgradeCost')
     if (handUpgradeCost) this.hand.upgradeCost = Number(handUpgradeCost);
 
-    this.foot.amount = Number(localStorage.getItem('footAmount'));
-    var footCost = localStorage.getItem('footCost')
-    if (footCost) this.foot.cost = Number(footCost);
-    var footLevel = localStorage.getItem('footLevel')
-    if (footLevel) this.foot.level = Number(handLevel);
-    var footCps = localStorage.getItem('footCps')
-    if (footCps) this.foot.cps = Number(footCps);
-    var footUpgradeCost = localStorage.getItem('footUpgradeCost')
-    if (footUpgradeCost) this.foot.upgradeCost = Number(footUpgradeCost);
+    this.engineer.amount = Number(localStorage.getItem('engineerAmount'));
+    var engineerCost = localStorage.getItem('engineerCost')
+    if (engineerCost) this.engineer.cost = Number(engineerCost);
+    var engineerLevel = localStorage.getItem('engineerLevel')
+    if (engineerLevel) this.engineer.level = Number(engineerLevel);
+    var engineerCps = localStorage.getItem('engineerCps')
+    if (engineerCps) this.engineer.cps = Number(engineerCps);
+    var engineerUpgradeCost = localStorage.getItem('engineerUpgradeCost')
+    if (engineerUpgradeCost) this.engineer.upgradeCost = Number(engineerUpgradeCost);
+
+    this.ai.amount = Number(localStorage.getItem('aiAmount'));
+    var aiCost = localStorage.getItem('aiCost')
+    if (aiCost) this.ai.cost = Number(aiCost);
+    var aiLevel = localStorage.getItem('aiLevel')
+    if (aiLevel) this.ai.level = Number(aiLevel);
+    var aiCps = localStorage.getItem('aiCps')
+    if (aiCps) this.ai.cps = Number(aiCps);
+    var aiUpgradeCost = localStorage.getItem('aiUpgradeCost')
+    if (aiUpgradeCost) this.ai.upgradeCost = Number(aiUpgradeCost);
+
+    interval(1000).subscribe(() => this.checkInactivity());
   }
 
   public points$ = new BehaviorSubject<number>(0);
   public canBuyHand$: Observable<boolean>;
-  public canBuyFoot$: Observable<boolean>;
+  public canBuyEngineer$: Observable<boolean>;
+  public canBuyAi$: Observable<boolean>;
   public canUpgradeHand$: Observable<boolean>;
-  public canUpgradeFoot$: Observable<boolean>;
+  public canUpgradeEngineer$: Observable<boolean>;
+  public canUpgradeAi$: Observable<boolean>;
   public isSpinning: boolean = false;
   public clickCount: number = 0;
   public clickSpeed: number = 0;
@@ -61,7 +80,13 @@ export class AppComponent {
   private lastClickTime: number = 0;
 
   public onCamelClick() {
-    this.points$.next(this.points$.value + 1);
+    if (this.isSpinning) {
+      this.points$.next(this.points$.value + 2);
+    }
+    else
+    {
+      this.points$.next(this.points$.value + 1);
+    }
     this.isSpinning = true;
     this.clickCount++;
 
@@ -81,6 +106,13 @@ export class AppComponent {
     }, 1000 * this.clickCount);
   }
 
+  private checkInactivity() {
+    const currentTime = Date.now();
+    if (currentTime - this.lastClickTime > 5000) { // 5 seconds of inactivity
+      this.spinDuration = 3; // Set spin duration to 3 second
+    }
+  }
+
   public buyHand() {
     if (this.hand.cost > this.points$.value) {
       return;
@@ -93,32 +125,70 @@ export class AppComponent {
     localStorage.setItem('handCost', String(this.hand.cost));
   }
 
-  public buyFoot() {
-    if (this.foot.cost > this.points$.value) {
+  public buyEngineer() {
+    if (this.engineer.cost > this.points$.value) {
       return;
     }
 
-    this.points$.next(this.points$.value - this.foot.cost);
-    this.foot.amount++;
-    this.foot.cost += Math.round(this.hand.cost * 1.15);
-    localStorage.setItem('footAmount', String(this.foot.amount));
-    localStorage.setItem('footCost', String(this.foot.cost));
+    this.points$.next(this.points$.value - this.engineer.cost);
+    this.engineer.amount++;
+    this.engineer.cost += Math.round(this.engineer.cost * 1.15);
+    localStorage.setItem('engineerAmount', String(this.engineer.amount));
+    localStorage.setItem('engineerCost', String(this.engineer.cost));
+  }
+
+  public buyAi() {
+    if (this.ai.cost > this.points$.value) {
+      return;
+    }
+
+    this.points$.next(this.points$.value - this.ai.cost);
+    this.ai.amount++;
+    this.ai.cost += Math.round(this.ai.cost * 1.15);
+    localStorage.setItem('aiAmount', String(this.ai.amount));
+    localStorage.setItem('aiCost', String(this.ai.cost));
   }
 
   public upgradeHand()
   {
+    if (this.hand.upgradeCost > this.points$.value) {
+      return;
+    }
+
+    this.points$.next(this.points$.value - this.hand.upgradeCost);
+
     this.upgrade(this.hand);
     localStorage.setItem('handLevel', String(this.hand.level));
     localStorage.setItem('handCps', String(this.hand.cps));
     localStorage.setItem('handUpgradeCost', String(this.hand.upgradeCost));
   }
 
-  public upgradeFoot()
+  public upgradeEngineer()
   {
-    this.upgrade(this.foot);
-    localStorage.setItem('footLevel', String(this.foot.level));
-    localStorage.setItem('footCps', String(this.foot.cps));
-    localStorage.setItem('footUpgradeCost', String(this.foot.upgradeCost));
+    if (this.engineer.upgradeCost > this.points$.value) {
+      return;
+    }
+
+    this.points$.next(this.points$.value - this.engineer.upgradeCost);
+
+    this.upgrade(this.engineer);
+    localStorage.setItem('engineerLevel', String(this.engineer.level));
+    localStorage.setItem('engineerCps', String(this.engineer.cps));
+    localStorage.setItem('engineerUpgradeCost', String(this.engineer.upgradeCost));
+  }
+
+  public upgradeAi()
+  {
+    if (this.ai.upgradeCost > this.points$.value) {
+      return;
+    }
+
+    this.points$.next(this.points$.value - this.ai.upgradeCost);
+
+    this.upgrade(this.ai);
+    localStorage.setItem('aiLevel', String(this.ai.level));
+    localStorage.setItem('aiCps', String(this.ai.cps));
+    localStorage.setItem('aiUpgradeCost', String(this.ai.upgradeCost));
   }
 
   public upgrade(item: Item) {
@@ -128,7 +198,10 @@ export class AppComponent {
   }
 
   public totalCps() {
-    return this.hand.amount * this.hand.cps + this.foot.amount * this.foot.cps;
+    if (this.isSpinning) {
+      return (this.hand.amount * this.hand.cps + this.engineer.amount * this.engineer.cps) * 2;
+    }
+    return this.hand.amount * this.hand.cps + this.engineer.amount * this.engineer.cps;
   }
 
   public setPoints(points: number) {
@@ -145,13 +218,22 @@ export class AppComponent {
     upgradeCost: 50
   }
 
-  public foot: Item = {
-    name: "Foot",
+  public engineer: Item = {
+    name: "Engineer",
     amount: 0,
-    cost: 20,
-    cps: 2,
+    cost: 100,
+    cps: 15,
     level: 1,
-    upgradeCost: 100
+    upgradeCost: 1000
+  }
+
+  public ai: Item = {
+    name: "AI",
+    amount: 0,
+    cost: 1000,
+    cps: 200,
+    level: 1,
+    upgradeCost: 10000
   }
 }
 
