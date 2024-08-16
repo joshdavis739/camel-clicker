@@ -56,11 +56,23 @@ export class AppComponent {
   public canUpgradeFoot$: Observable<boolean>;
   public isSpinning: boolean = false;
   public clickCount: number = 0;
+  public clickSpeed: number = 0;
+  public spinDuration: number = 1;
+  private lastClickTime: number = 0;
 
   public onCamelClick() {
     this.points$.next(this.points$.value + 1);
     this.isSpinning = true;
     this.clickCount++;
+
+    // Calculate click speed
+    const currentTime = Date.now();
+    if (this.lastClickTime !== 0) {
+      this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
+      this.spinDuration = 1 / this.clickSpeed;
+    }
+    this.lastClickTime = currentTime;
+
     setTimeout(() => {
         this.clickCount--;
         if (this.clickCount === 0) {
@@ -108,7 +120,7 @@ export class AppComponent {
     localStorage.setItem('footCps', String(this.foot.cps));
     localStorage.setItem('footUpgradeCost', String(this.foot.upgradeCost));
   }
-  
+
   public upgrade(item: Item) {
     item.level++;
     item.cps *= 1.5;
