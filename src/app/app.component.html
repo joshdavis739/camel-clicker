@@ -24,7 +24,7 @@
     <div *ngIf="isSpinning">Hurry up! your camel spinning will stop in: {{clickCount}} seconds</div>
     <div *ngIf="isPowerUp">POWER!!!!</div>
 
-    <div @enterAnimation class="achievement-toast" *ngIf="showAchiement$ | async" (click)="onachclick()">
+    <div @enterAnimation class="achievement-toast" *ngIf="showAchiement$ | async">
       <div class="achievement-toast__title">Achievement get!</div>
       <div class="achievement-toast__subtitle">{{recentAchevemten}}</div>
     </div>
@@ -109,7 +109,8 @@
       <ul>
         <ng-container *ngFor="let achievement of achievementService.achievements">
           <li class="achievement-container"
-            [ngClass]="{'achievement-container--unlocked' : achievement.unlocked}">
+            [ngClass]="{'achievement-container--unlocked' : achievement.unlocked}"
+            (click)="achievement.key === 'click-achiement' && onachclick()">
             <div class="achievement__title">
               {{achievement.name}}
             </div>

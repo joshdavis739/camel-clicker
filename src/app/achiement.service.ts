@@ -71,8 +71,8 @@ export class AchiementService {
     },
     {
       key: 'click-achiement',
-      name: 'This isn\'t clickable',
-      description: 'Click the achievement pop-up',
+      name: 'Click me',
+      description: 'You followed basic instructions',
       unlocked: false
     },
     {
