@@ -92,7 +92,7 @@ export class AppComponent implements OnInit {
     interval(1000).subscribe(() => this.checkInactivity());
 
     interval(2000).subscribe(() => {
-      if (!this.isPowerUp && Math.random() < 0.1)
+      if (!this.isPowerUp && Math.random() < 0.01)
       {
         this.isPowerUpAppear = true;
         setTimeout(() => {
@@ -191,7 +191,8 @@ export class AppComponent implements OnInit {
 
   public onPowerUpClick() {
     this.isPowerUpAppear = false;
-    
+    this.achievementService.ensureAchiement('star');
+
     if (this.isPowerUp) {
       return;
     }

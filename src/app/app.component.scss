@@ -202,7 +202,7 @@ html, body {
   width: calc(100% - 4rem);
   top: 0;
   color: white;
-  background-color: black;
+  background-color: #dea45d;
   border-radius: 4px;
   border: 2px solid white;
 
@@ -214,6 +214,11 @@ html, body {
   &:not(:disabled) {
     &:hover {
       cursor: pointer;
+    }
+
+    .upgrade-button__title,
+    .upgrade-button__cost {
+color: black;
     }
   }
 }

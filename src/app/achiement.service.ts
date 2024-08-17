@@ -99,6 +99,12 @@ export class AchiementService {
       description: 'Have 100 hands on the go',
       unlocked: false
     },
+    {
+      key: 'star',
+      name: 'Make a wish',
+      description: 'Click on a star',
+      unlocked: false
+    },
   ]
 }
 
