@@ -94,6 +94,7 @@ export class AppComponent implements OnInit {
     this.spin();
 
     setInterval(() => {
+      // Slow down spin code - Gradual slow near end - Based on max spin speed 100.
       if (this.spinSpeed > this.minSpeed) {
         if (this.spinSpeed > 80) {
           this.spinSpeed -= 25;
@@ -183,10 +184,6 @@ export class AppComponent implements OnInit {
   public poewrUpIconLeft: number = 10;
   public poewrUpIconTop: number = 40;
 
-  //private clickCount = 0; // Number of clicks in the current second
-  //private lastClickTime = 0; // Time of the last click
-  private lastClickTime2: number = 0;
-  private clickInterval: number = 1000; // Initial click interval (1 second)
   private minSpeed: number = 0; // Minimum spin speed
   private maxSpeed: number = 100; // Maximum spin speed
   private spinSpeed: number = 0; // Initial spin speed
@@ -203,10 +200,8 @@ export class AppComponent implements OnInit {
     {
       this.points$.next(this.points$.value + 1);
     }
-    //this.isSpinning = true;
+
     this.clickCount++;
-
-
     let currentTime = new Date().getTime();
 
     // If the current click is within 1 second of the last click, increment the click count
@@ -242,11 +237,6 @@ export class AppComponent implements OnInit {
     // Update the angle
     console.log('spinSpeed', this.spinSpeed);
     this.angle += this.spinSpeed;
-
-    //console.log('here', this.angle);
-
-    // Apply the rotation to the element
-    //spinElement.style.transform = 'rotate(' + this.angle + 'deg)';
 
     // Request the next frame
 
