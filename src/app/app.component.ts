@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, interval, map, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, interval, map, Observable, Subject, tap, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -64,6 +64,18 @@ export class AppComponent {
     if (aiUpgradeCost) this.ai.upgradeCost = Number(aiUpgradeCost);
 
     interval(1000).subscribe(() => this.checkInactivity());
+
+    this.spin();
+
+    setInterval(() => {
+      if (this.spinSpeed > this.minSpeed) {
+        this.spinSpeed -= 3;
+
+        if (this.spinSpeed < 0) {
+          this.spinSpeed = 0;
+        }
+      }
+    }, 500);
   }
 
   public points$ = new BehaviorSubject<number>(0);
@@ -79,6 +91,15 @@ export class AppComponent {
   public spinDuration: number = 1;
   private lastClickTime: number = 0;
 
+  //private clickCount = 0; // Number of clicks in the current second
+  //private lastClickTime = 0; // Time of the last click
+  private lastClickTime2: number = 0;
+  private clickInterval: number = 1000; // Initial click interval (1 second)
+  private minSpeed: number = 0; // Minimum spin speed
+  private maxSpeed: number = 30; // Maximum spin speed
+  private spinSpeed: number = 0; // Initial spin speed
+  public angle: number = 0; // Initial angle
+
   public onCamelClick() {
     if (this.isSpinning) {
       this.points$.next(this.points$.value + 2);
@@ -87,23 +108,63 @@ export class AppComponent {
     {
       this.points$.next(this.points$.value + 1);
     }
-    this.isSpinning = true;
+    //this.isSpinning = true;
     this.clickCount++;
 
     // Calculate click speed
-    const currentTime = Date.now();
-    if (this.lastClickTime !== 0) {
-      this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
-      this.spinDuration = 1 / this.clickSpeed;
-    }
-    this.lastClickTime = currentTime;
+    // const currentTime = Date.now();
+    // if (this.lastClickTime !== 0) {
+    //   this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
+    //   this.spinDuration = 1 / this.clickSpeed;
+    // }
+    // this.lastClickTime = currentTime;
 
-    setTimeout(() => {
-        this.clickCount--;
-        if (this.clickCount === 0) {
-            this.isSpinning = false;
-        }
-    }, 1000 * this.clickCount);
+    // setTimeout(() => {
+    //     this.clickCount--;
+    //     if (this.clickCount === 0) {
+    //         this.isSpinning = false;
+    //     }
+    // }, 1000 * this.clickCount);
+
+
+    let currentTime2 = new Date().getTime();
+
+    // If the current click is within 1 second of the last click, increment the click count
+    if (currentTime2 - this.lastClickTime < 1000) {
+      this.clickCount++;
+    }
+    // If the current click is more than 1 second after the last click, reset the click count
+    else {
+      this.clickCount = 1;
+    }
+
+    // Update the spin speed based on the click count
+    this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 80);
+    if (this.spinSpeed < 0) {
+      this.spinSpeed = 0;
+    } else if (this.spinSpeed > this.maxSpeed) {
+      this.spinSpeed = this.maxSpeed;
+    }
+
+    // Update the last click time
+    this.lastClickTime = currentTime2;
+  }
+
+  private spin() {
+    // Update the angle
+    console.log('spinSpeed', this.spinSpeed);
+    this.angle += this.spinSpeed;
+
+    //console.log('here', this.angle);
+
+    // Apply the rotation to the element
+    //spinElement.style.transform = 'rotate(' + this.angle + 'deg)';
+
+    // Request the next frame
+
+       setTimeout(() => {
+        requestAnimationFrame(this.spin.bind(this));
+    }, 10);
   }
 
   private checkInactivity() {

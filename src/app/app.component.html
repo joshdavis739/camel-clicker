@@ -13,7 +13,7 @@
           <img class="item" src="../assets/hand.svg" [ngStyle]="{'--i': i }" />
         </ng-container>
       </div>
-      <img class="camel" [ngStyle]="{'animation-duration': spinDuration + 's'}" [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
+      <img class="camel" [ngStyle]="{ 'rotate': angle + 'deg' }" [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
     </button>
 
     <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
