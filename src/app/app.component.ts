@@ -133,10 +133,11 @@ export class AppComponent implements OnInit {
       }
     }, 500);
 
-
-    interval(2000).subscribe(() => {
+    interval(1000).subscribe(() => {
       if (!this.isPowerUp && Math.random() < 0.01)
       {
+        this.poewrUpIconLeft = Math.floor(Math.random() * 80);
+        this.poewrUpIconTop = Math.floor(Math.random() * 80);
         this.isPowerUpAppear = true;
         setTimeout(() => {
           this.isPowerUpAppear = false;
@@ -193,8 +194,8 @@ export class AppComponent implements OnInit {
   private lastClickTime: number = 0;
   public isPowerUp: boolean = false;
   public isPowerUpAppear: boolean = false;
-  public poewrUpIconLeft: number = 10;
-  public poewrUpIconTop: number = 40;
+  public poewrUpIconLeft: number = 0;
+  public poewrUpIconTop: number = 0;
 
   private minSpeed: number = 0; // Minimum spin speed
   private minSpeedWithUpgrade: number = 5;
@@ -265,9 +266,6 @@ export class AppComponent implements OnInit {
     if (this.isPowerUp) {
       return;
     }
-
-    this.poewrUpIconLeft = Math.floor(Math.random() * 80);
-    this.poewrUpIconTop = Math.floor(Math.random() * 80);
 
     this.isPowerUp = true;
 
@@ -394,7 +392,7 @@ export class AppComponent implements OnInit {
     }
     if (this.isPowerUp)
     {
-      cps *= 2;
+      cps *= 4;
     }
     return cps;
   }

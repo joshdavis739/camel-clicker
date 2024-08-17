@@ -1,4 +1,4 @@
-<div class="everything">
+<div class="everything" [ngStyle]="{'filter': isPowerUp ? 'invert(80%)' : null}">
   <div class="container">
     <div *ngIf="isPowerUpAppear" class="power-up" [ngStyle]="{'left': poewrUpIconLeft + '%', 'top': poewrUpIconTop + '%'}">
       <button class="power__click" (click)="onPowerUpClick()" alt="Power Up">
@@ -17,12 +17,12 @@
           <img class="item" src="../assets/hand.svg" [ngStyle]="{'--i': i }" />
         </ng-container>
       </div>
-      <img class="camel" [ngStyle]="{ 'rotate': angle + 'deg' }" [class.spinning]="isSpinning" src="../assets/camel-icon.svg" alt="Camel Image" style="transform: rotate(-30deg);">
+      <img class="camel" [ngStyle]="{ 'rotate': angle + 'deg' }" [class.spinning]="isSpinning" [src]="ai.amount > 0 ? '../assets/ai.png' : '../assets/camel-icon.svg'" alt="Camel Image" style="transform: rotate(-30deg);">
     </button>
 
     <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
     <div *ngIf="isSpinning">Hurry up! your camel spinning will stop in: {{clickCount}} seconds</div>
-    <div *ngIf="isPowerUp">POWER!!!!</div>
+    <div *ngIf="isPowerUp">POWER!!!! (x4 CPS)</div>
 
     <div @enterAnimation class="achievement-toast" *ngIf="showAchiement$ | async">
       <div class="achievement-toast__title">Achievement get!</div>
