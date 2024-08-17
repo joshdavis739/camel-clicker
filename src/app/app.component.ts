@@ -174,9 +174,6 @@ export class AppComponent implements OnInit {
       if (this.clickSpeed > 15) {
         this.achievementService.ensureAchiement('click-sonic');
       }
-      if (this.clickSpeed > 100) {
-        this.achievementService.ensureAchiement('cheater');
-      }
       this.spinDuration = 1 / this.clickSpeed;
     }
     this.lastClickTime = currentTime;

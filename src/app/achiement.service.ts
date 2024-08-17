@@ -82,12 +82,6 @@ export class AchiementService {
       unlocked: false
     },
     {
-      key: 'cheater',
-      name: 'You\'re definitely cheating',
-      description: 'Reach click speed > 100',
-      unlocked: false
-    },
-    {
       key: 'handy',
       name: 'That\'s handy',
       description: 'Outsource your camel pats by buying a hand',
