@@ -175,19 +175,45 @@ export class AppComponent implements OnInit {
   private spinSpeed: number = 0; // Initial spin speed
   public angle: number = 0; // Initial angle
 
-  public onCamelClick() {
+  public onCamelClick($event: MouseEvent) {
     this.myAudio.play();
     this.achievementService.ensureAchiement('click-camel');
 
     if (this.isSpinning) {
-      this.points$.next(this.points$.value + 2);
+      this.points$.next(this.points$.value + this.hand.amount + 2);
     }
     else
     {
-      this.points$.next(this.points$.value + 1);
+      this.points$.next(this.points$.value + this.hand.amount + 1);
     }
     //this.isSpinning = true;
     this.clickCount++;
+
+    // Thank you chat gpt for this
+    // Create a new div element
+    const newDiv = document.createElement('img');
+
+    // Set the position and style of the new div
+
+    var yPosOFf = (Math.random() * 2 - 1) * 50;
+    setTimeout(() => {
+
+      newDiv.style.transition = '1s'
+      newDiv.style.opacity ='0'
+      newDiv.style.top = 'calc(' + $event.clientY + 'px - 140px + ' + yPosOFf + 'px)';
+    },2)
+    newDiv.src = "../assets/cash-money.png";
+    newDiv.style.left = 'calc(' + $event.clientX + 'px - 40px + ' + (Math.random() * 2 - 1) * 50 + 'px)';
+    newDiv.style.top = 'calc(' + $event.clientY + 'px - 40px + ' + yPosOFf + 'px)';
+    newDiv.style.zIndex = '99';
+    newDiv.style.position = 'absolute';
+    newDiv.style.width = '80px';
+    newDiv.style.height = '80px';
+    newDiv.style.pointerEvents = 'none';
+
+    // Add the new div to the body
+    document.body.appendChild(newDiv);
+
 
 
     // Calculate click speed
@@ -222,6 +248,7 @@ export class AppComponent implements OnInit {
     if (this.spinSpeed < 0) {
       this.spinSpeed = 0;
     } else if (this.spinSpeed > this.maxSpeed) {
+      this.achievementService.ensureAchiement('maximum-camel-velocity');
       this.spinSpeed = this.maxSpeed;
     }
 

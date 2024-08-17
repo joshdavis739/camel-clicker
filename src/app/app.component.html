@@ -11,7 +11,7 @@
       <div class="clouds"></div>
     </div>
 
-    <button class="camel__click" (click)="onCamelClick()" [ngStyle]="{'--m': hand.amount }" style="--tan: 0.41">
+    <button class="camel__click" (click)="onCamelClick($event)" [ngStyle]="{'--m': hand.amount }" style="--tan: 0.41">
       <div class="hands-container">
         <ng-container *ngFor="let item of [].constructor(hand.amount); index as i">
           <img class="item" src="../assets/hand.svg" [ngStyle]="{'--i': i }" />
@@ -28,6 +28,7 @@
       <div class="achievement-toast__title">Achievement get!</div>
       <div class="achievement-toast__subtitle">{{recentAchevemten}}</div>
     </div>
+
 
     <div class="cash-money-counter">
       <img src="../assets/cash-money.png" alt="Cash money" />

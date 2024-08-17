@@ -76,9 +76,9 @@ export class AchiementService {
       unlocked: false
     },
     {
-      key: 'click-sonic',
+      key: 'maximum-camel-velocity',
       name: 'Carpal tunnel',
-      description: 'Reach click speed > 15',
+      description: 'Achieve maximum camel rotation velocity',
       unlocked: false
     },
     {
