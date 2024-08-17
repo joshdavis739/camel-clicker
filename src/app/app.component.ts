@@ -91,6 +91,19 @@ export class AppComponent implements OnInit {
 
     interval(1000).subscribe(() => this.checkInactivity());
 
+    this.spin();
+
+    setInterval(() => {
+      if (this.spinSpeed > this.minSpeed) {
+        this.spinSpeed -= 3;
+
+        if (this.spinSpeed < 0) {
+          this.spinSpeed = 0;
+        }
+      }
+    }, 500);
+
+
     interval(2000).subscribe(() => {
       if (!this.isPowerUp && Math.random() < 0.01)
       {
@@ -101,6 +114,7 @@ export class AppComponent implements OnInit {
       }
       });
   }
+
   ngOnInit(): void {
     this.achievementService.onAchivemint.pipe(tap(x => {
       this.showAchiement$.next(true);
@@ -152,6 +166,15 @@ export class AppComponent implements OnInit {
   public poewrUpIconLeft: number = 10;
   public poewrUpIconTop: number = 40;
 
+  //private clickCount = 0; // Number of clicks in the current second
+  //private lastClickTime = 0; // Time of the last click
+  private lastClickTime2: number = 0;
+  private clickInterval: number = 1000; // Initial click interval (1 second)
+  private minSpeed: number = 0; // Minimum spin speed
+  private maxSpeed: number = 30; // Maximum spin speed
+  private spinSpeed: number = 0; // Initial spin speed
+  public angle: number = 0; // Initial angle
+
   public onCamelClick() {
     this.myAudio.play();
     this.achievementService.ensureAchiement('click-camel');
@@ -163,27 +186,64 @@ export class AppComponent implements OnInit {
     {
       this.points$.next(this.points$.value + 1);
     }
-    this.isSpinning = true;
+    //this.isSpinning = true;
     this.clickCount++;
 
 
     // Calculate click speed
-    const currentTime = Date.now();
-    if (this.lastClickTime !== 0) {
-      this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
-      if (this.clickSpeed > 15) {
-        this.achievementService.ensureAchiement('click-sonic');
-      }
-      this.spinDuration = 1 / this.clickSpeed;
-    }
-    this.lastClickTime = currentTime;
+    // const currentTime = Date.now();
+    // if (this.lastClickTime !== 0) {
+    //   this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
+    //   this.spinDuration = 1 / this.clickSpeed;
+    // }
+    // this.lastClickTime = currentTime;
 
-    setTimeout(() => {
-        this.clickCount--;
-        if (this.clickCount === 0) {
-            this.isSpinning = false;
-        }
-    }, 1000 * this.clickCount);
+    // setTimeout(() => {
+    //     this.clickCount--;
+    //     if (this.clickCount === 0) {
+    //         this.isSpinning = false;
+    //     }
+    // }, 1000 * this.clickCount);
+
+
+    let currentTime2 = new Date().getTime();
+
+    // If the current click is within 1 second of the last click, increment the click count
+    if (currentTime2 - this.lastClickTime < 1000) {
+      this.clickCount++;
+    }
+    // If the current click is more than 1 second after the last click, reset the click count
+    else {
+      this.clickCount = 1;
+    }
+
+    // Update the spin speed based on the click count
+    this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 80);
+    if (this.spinSpeed < 0) {
+      this.spinSpeed = 0;
+    } else if (this.spinSpeed > this.maxSpeed) {
+      this.spinSpeed = this.maxSpeed;
+    }
+
+    // Update the last click time
+    this.lastClickTime = currentTime2;
+  }
+
+  private spin() {
+    // Update the angle
+    console.log('spinSpeed', this.spinSpeed);
+    this.angle += this.spinSpeed;
+
+    //console.log('here', this.angle);
+
+    // Apply the rotation to the element
+    //spinElement.style.transform = 'rotate(' + this.angle + 'deg)';
+
+    // Request the next frame
+
+       setTimeout(() => {
+        requestAnimationFrame(this.spin.bind(this));
+    }, 10);
   }
 
   public onPowerUpClick() {
