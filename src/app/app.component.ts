@@ -171,7 +171,7 @@ export class AppComponent implements OnInit {
   private lastClickTime2: number = 0;
   private clickInterval: number = 1000; // Initial click interval (1 second)
   private minSpeed: number = 0; // Minimum spin speed
-  private maxSpeed: number = 30; // Maximum spin speed
+  private maxSpeed: number = 100; // Maximum spin speed
   private spinSpeed: number = 0; // Initial spin speed
   public angle: number = 0; // Initial angle
 
@@ -190,26 +190,10 @@ export class AppComponent implements OnInit {
     this.clickCount++;
 
 
-    // Calculate click speed
-    // const currentTime = Date.now();
-    // if (this.lastClickTime !== 0) {
-    //   this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
-    //   this.spinDuration = 1 / this.clickSpeed;
-    // }
-    // this.lastClickTime = currentTime;
-
-    // setTimeout(() => {
-    //     this.clickCount--;
-    //     if (this.clickCount === 0) {
-    //         this.isSpinning = false;
-    //     }
-    // }, 1000 * this.clickCount);
-
-
-    let currentTime2 = new Date().getTime();
+    let currentTime = new Date().getTime();
 
     // If the current click is within 1 second of the last click, increment the click count
-    if (currentTime2 - this.lastClickTime < 1000) {
+    if (currentTime - this.lastClickTime < 1000) {
       this.clickCount++;
     }
     // If the current click is more than 1 second after the last click, reset the click count
@@ -225,8 +209,16 @@ export class AppComponent implements OnInit {
       this.spinSpeed = this.maxSpeed;
     }
 
+    if (this.lastClickTime !== 0) {
+      this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
+      if (this.clickSpeed > 75) {
+        this.achievementService.ensureAchiement('click-sonic');
+      }
+      this.spinDuration = 1 / this.clickSpeed;
+    }
+
     // Update the last click time
-    this.lastClickTime = currentTime2;
+    this.lastClickTime = currentTime;
   }
 
   private spin() {
