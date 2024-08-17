@@ -95,7 +95,24 @@ export class AppComponent implements OnInit {
 
     setInterval(() => {
       if (this.spinSpeed > this.minSpeed) {
-        this.spinSpeed -= 3;
+        if (this.spinSpeed > 80) {
+          this.spinSpeed -= 25;
+        }
+        else if (this.spinSpeed > 50) {
+          this.spinSpeed -= 15;
+        }
+        else if (this.spinSpeed > 25) {
+          this.spinSpeed -= 10;
+        }
+        else if (this.spinSpeed > 15) {
+          this.spinSpeed -= 5;
+        }
+        else if (this.spinSpeed > 5) {
+          this.spinSpeed -= 2;
+        }
+        else {
+          this.spinSpeed -= 1;
+        }
 
         if (this.spinSpeed < 0) {
           this.spinSpeed = 0;
@@ -202,7 +219,7 @@ export class AppComponent implements OnInit {
     }
 
     // Update the spin speed based on the click count
-    this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 80);
+    this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 160);
     if (this.spinSpeed < 0) {
       this.spinSpeed = 0;
     } else if (this.spinSpeed > this.maxSpeed) {
