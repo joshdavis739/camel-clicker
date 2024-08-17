@@ -1,7 +1,11 @@
 <div class="everything">
   <div class="container">
+    <div *ngIf="isPowerUpAppear" class="power-up" [ngStyle]="{'left': poewrUpIconLeft + '%', 'top': poewrUpIconTop + '%'}">
+      <button class="power__click" (click)="onPowerUpClick()" alt="Power Up">
+        <img class="power-up-img" src="../assets/power-up.svg"  />
+      </button>
+    </div>
     <div class="background-container">
-
       <div class="stars"></div>
       <div class="twinkling"></div>
       <div class="clouds"></div>
@@ -17,7 +21,13 @@
     </button>
 
     <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
-    <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
+    <div *ngIf="isSpinning">Hurry up! your camel spinning will stop in: {{clickCount}} seconds</div>
+    <div *ngIf="isPowerUp">POWER!!!!</div>
+
+    <div @enterAnimation class="achievement-toast" *ngIf="showAchiement$ | async">
+      <div class="achievement-toast__title">Achievement get!</div>
+      <div class="achievement-toast__subtitle">{{recentAchevemten}}</div>
+    </div>
 
     <div class="cash-money-counter">
       <img src="../assets/cash-money.png" alt="Cash money" />
@@ -32,7 +42,7 @@
   </div>
 
   <div class="right-panel">
-    <h2 class="right-panel__title">Upgrades</h2>
+    <h2 style="position: sticky;" class="right-panel__title">Upgrades</h2>
     <ul class="upgrades-list">
       <li class="upgrade-list__upgrade">
         <button class="upgrade__button" (click)="buyHand()" [disabled]="(canBuyHand$ | async) === false">
@@ -43,17 +53,15 @@
             Cost: {{this.hand.cost}}
           </div>
         </button>
-        <div class="upgrade__count" >{{this.hand.amount}}</div>
-      </li>
-      <li class="upgrade-list__upgrade">
         <button class="levelUp__button" (click)="upgradeHand()" [disabled]="(canUpgradeHand$ | async) === false">
           <div class="upgrade-button__title">
-            Upgrade Hand
+            Upgrade
           </div>
           <div class="upgrade-button__cost">
             Cost: {{this.hand.upgradeCost}}, Level: {{this.hand.level}}, CPS: {{this.hand.cps.toFixed(2)}}
           </div>
         </button>
+        <div class="upgrade__count">{{this.hand.amount}}</div>
       </li>
       <li class="upgrade-list__upgrade">
         <button class="upgrade__button" (click)="buyEngineer()" [disabled]="(canBuyEngineer$ | async) === false">
@@ -64,17 +72,15 @@
             Cost: {{this.engineer.cost}}
           </div>
         </button>
-        <div class="upgrade__count">{{this.engineer.amount}}</div>
-      </li>
-      <li class="upgrade-list__upgrade">
         <button class="levelUp__button" (click)="upgradeEngineer()" [disabled]="(canUpgradeEngineer$ | async) === false">
           <div class="upgrade-button__title">
-            Upgrade Engineer
+            Upgrade
           </div>
           <div class="upgrade-button__cost">
             Cost: {{this.engineer.upgradeCost}}, Level: {{this.engineer.level}}, CPS: {{this.engineer.cps.toFixed(2)}}
           </div>
         </button>
+        <div class="upgrade__count">{{this.engineer.amount}}</div>
       </li>
       <li class="upgrade-list__upgrade">
         <button class="upgrade__button" (click)="buyAi()" [disabled]="(canBuyAi$ | async) === false">
@@ -85,18 +91,35 @@
             Cost: {{this.ai.cost}}
           </div>
         </button>
-        <div class="upgrade__count">{{this.ai.amount}}</div>
-      </li>
-      <li class="upgrade-list__upgrade">
         <button class="levelUp__button" (click)="upgradeAi()" [disabled]="(canUpgradeAi$ | async) === false">
           <div class="upgrade-button__title">
-            Upgrade AI
+            Upgrade
           </div>
           <div class="upgrade-button__cost">
             Cost: {{this.ai.upgradeCost}}, Level: {{this.ai.level}}, CPS: {{this.ai.cps.toFixed(2)}}
           </div>
         </button>
+        <div class="upgrade__count">{{this.ai.amount}}</div>
       </li>
     </ul>
+
+    <hr>
+    <div>
+      <h3>Achievements</h3>
+      <ul>
+        <ng-container *ngFor="let achievement of achievementService.achievements">
+          <li class="achievement-container"
+            [ngClass]="{'achievement-container--unlocked' : achievement.unlocked}"
+            (click)="achievement.key === 'click-achiement' && onachclick()">
+            <div class="achievement__title">
+              {{achievement.name}}
+            </div>
+            <div class="achievement__subtitle">
+              {{!achievement.unlocked ? '???' : achievement.description}}
+            </div>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
   </div>
 </div>
