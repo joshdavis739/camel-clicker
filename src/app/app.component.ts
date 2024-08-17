@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { BehaviorSubject, interval, map, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, interval, map, min, Observable, Subject, tap } from 'rxjs';
 import { AchiementService } from './achiement.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -91,6 +91,18 @@ export class AppComponent implements OnInit {
 
     interval(1000).subscribe(() => this.checkInactivity());
 
+    // Change the min spin speed if has upgrades.
+    if (this.totalCps() > 0) {
+      this.minSpeed = this.minSpeedWithUpgrade;
+
+      this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 160);
+      if (this.spinSpeed < this.minSpeed) {
+        this.spinSpeed = this.minSpeed;
+      } else if (this.spinSpeed > this.maxSpeed) {
+        this.spinSpeed = this.maxSpeed;
+      }
+    }
+
     this.spin();
 
     setInterval(() => {
@@ -115,8 +127,8 @@ export class AppComponent implements OnInit {
           this.spinSpeed -= 1;
         }
 
-        if (this.spinSpeed < 0) {
-          this.spinSpeed = 0;
+        if (this.spinSpeed < this.minSpeed) {
+          this.spinSpeed = this.minSpeed;
         }
       }
     }, 500);
@@ -185,6 +197,7 @@ export class AppComponent implements OnInit {
   public poewrUpIconTop: number = 40;
 
   private minSpeed: number = 0; // Minimum spin speed
+  private minSpeedWithUpgrade: number = 5;
   private maxSpeed: number = 100; // Maximum spin speed
   private spinSpeed: number = 0; // Initial spin speed
   public angle: number = 0; // Initial angle
@@ -215,8 +228,8 @@ export class AppComponent implements OnInit {
 
     // Update the spin speed based on the click count
     this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 160);
-    if (this.spinSpeed < 0) {
-      this.spinSpeed = 0;
+    if (this.spinSpeed < this.minSpeed) {
+      this.spinSpeed = this.minSpeed;
     } else if (this.spinSpeed > this.maxSpeed) {
       this.spinSpeed = this.maxSpeed;
     }
@@ -270,6 +283,16 @@ export class AppComponent implements OnInit {
     }
   }
 
+  private bootUpTheCamel() {
+    this.minSpeed = this.minSpeedWithUpgrade;
+    this.spinSpeed = this.minSpeedWithUpgrade;
+    if (this.spinSpeed < this.minSpeed) {
+      this.spinSpeed = this.minSpeed;
+    } else if (this.spinSpeed > this.maxSpeed) {
+      this.spinSpeed = this.maxSpeed;
+    }
+  }
+
   public buyHand() {
     if (this.hand.cost > this.points$.value) {
       return;
@@ -278,6 +301,9 @@ export class AppComponent implements OnInit {
     this.points$.next(this.points$.value - this.hand.cost);
     this.hand.amount++;
     this.hand.cost = Math.round(this.hand.cost * 1.15);
+
+    this.bootUpTheCamel();
+
     localStorage.setItem('handAmount', String(this.hand.amount));
     localStorage.setItem('handCost', String(this.hand.cost));
 
@@ -295,6 +321,7 @@ export class AppComponent implements OnInit {
     this.points$.next(this.points$.value - this.engineer.cost);
     this.engineer.amount++;
     this.engineer.cost += Math.round(this.engineer.cost * 1.15);
+    this.bootUpTheCamel();
     localStorage.setItem('engineerAmount', String(this.engineer.amount));
     localStorage.setItem('engineerCost', String(this.engineer.cost));
   }
@@ -307,6 +334,7 @@ export class AppComponent implements OnInit {
     this.points$.next(this.points$.value - this.ai.cost);
     this.ai.amount++;
     this.ai.cost += Math.round(this.ai.cost * 1.15);
+    this.bootUpTheCamel();
     localStorage.setItem('aiAmount', String(this.ai.amount));
     localStorage.setItem('aiCost', String(this.ai.cost));
   }
