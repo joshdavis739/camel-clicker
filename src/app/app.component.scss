@@ -195,11 +195,19 @@ html, body {
   line-height: 4rem;
 }
 
+.levelUp__button {
+  width: calc(50% - 4rem);
+}
+
+.upgrade__button + .levelUp__button {
+  margin-left: 1rem;
+}
+
 .upgrade__button {
+  width: calc(50% - 1rem);
   vertical-align: top;
   height: 4rem;
   display: inline-block;
-  width: calc(100% - 4rem);
   top: 0;
   color: white;
   background-color: #dea45d;
@@ -245,7 +253,6 @@ color: black;
   vertical-align: top;
   height: 4rem;
   display: inline-block;
-  width: calc(50%);
   top: 0;
   color: white;
   background-color: black;

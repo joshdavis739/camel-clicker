@@ -21,7 +21,7 @@
     </button>
 
     <div>Your average click Speed is {{ clickSpeed.toFixed(2) }} clicks/second</div>
-    <div *ngIf="isSpinning">Hurry up! your canmel spinning will stop in: {{clickCount}} seconds</div>
+    <div *ngIf="isSpinning">Hurry up! your camel spinning will stop in: {{clickCount}} seconds</div>
     <div *ngIf="isPowerUp">POWER!!!!</div>
 
     <div @enterAnimation class="achievement-toast" *ngIf="showAchiement$ | async" (click)="onachclick()">
@@ -53,18 +53,16 @@
             Cost: {{this.hand.cost}}
           </div>
         </button>
-        <div class="upgrade__count">{{this.hand.amount}}</div>
-      </li>
-      <!-- <li class="upgrade-list__upgrade">
         <button class="levelUp__button" (click)="upgradeHand()" [disabled]="(canUpgradeHand$ | async) === false">
           <div class="upgrade-button__title">
-            Upgrade Hand
+            Upgrade
           </div>
           <div class="upgrade-button__cost">
             Cost: {{this.hand.upgradeCost}}, Level: {{this.hand.level}}, CPS: {{this.hand.cps.toFixed(2)}}
           </div>
         </button>
-      </li> -->
+        <div class="upgrade__count">{{this.hand.amount}}</div>
+      </li>
       <li class="upgrade-list__upgrade">
         <button class="upgrade__button" (click)="buyEngineer()" [disabled]="(canBuyEngineer$ | async) === false">
           <div class="upgrade-button__title">
@@ -74,18 +72,16 @@
             Cost: {{this.engineer.cost}}
           </div>
         </button>
-        <div class="upgrade__count">{{this.engineer.amount}}</div>
-      </li>
-      <!-- <li class="upgrade-list__upgrade">
         <button class="levelUp__button" (click)="upgradeEngineer()" [disabled]="(canUpgradeEngineer$ | async) === false">
           <div class="upgrade-button__title">
-            Upgrade Engineer
+            Upgrade
           </div>
           <div class="upgrade-button__cost">
             Cost: {{this.engineer.upgradeCost}}, Level: {{this.engineer.level}}, CPS: {{this.engineer.cps.toFixed(2)}}
           </div>
         </button>
-      </li> -->
+        <div class="upgrade__count">{{this.engineer.amount}}</div>
+      </li>
       <li class="upgrade-list__upgrade">
         <button class="upgrade__button" (click)="buyAi()" [disabled]="(canBuyAi$ | async) === false">
           <div class="upgrade-button__title">
@@ -95,18 +91,16 @@
             Cost: {{this.ai.cost}}
           </div>
         </button>
-        <div class="upgrade__count">{{this.ai.amount}}</div>
-      </li>
-      <!-- <li class="upgrade-list__upgrade">
         <button class="levelUp__button" (click)="upgradeAi()" [disabled]="(canUpgradeAi$ | async) === false">
           <div class="upgrade-button__title">
-            Upgrade AI
+            Upgrade
           </div>
           <div class="upgrade-button__cost">
             Cost: {{this.ai.upgradeCost}}, Level: {{this.ai.level}}, CPS: {{this.ai.cps.toFixed(2)}}
           </div>
         </button>
-      </li> -->
+        <div class="upgrade__count">{{this.ai.amount}}</div>
+      </li>
     </ul>
 
     <hr>
