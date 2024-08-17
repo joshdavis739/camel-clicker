@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { BehaviorSubject, interval, map, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, interval, map, min, Observable, Subject, tap } from 'rxjs';
 import { AchiementService } from './achiement.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -91,22 +91,53 @@ export class AppComponent implements OnInit {
 
     interval(1000).subscribe(() => this.checkInactivity());
 
+    // Change the min spin speed if has upgrades.
+    if (this.totalCps() > 0) {
+      this.minSpeed = this.minSpeedWithUpgrade;
+
+      this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 160);
+      if (this.spinSpeed < this.minSpeed) {
+        this.spinSpeed = this.minSpeed;
+      } else if (this.spinSpeed > this.maxSpeed) {
+        this.spinSpeed = this.maxSpeed;
+      }
+    }
+
     this.spin();
 
     setInterval(() => {
+      // Slow down spin code - Gradual slow near end - Based on max spin speed 100.
       if (this.spinSpeed > this.minSpeed) {
-        this.spinSpeed -= 3;
+        if (this.spinSpeed > 80) {
+          this.spinSpeed -= 25;
+        }
+        else if (this.spinSpeed > 50) {
+          this.spinSpeed -= 15;
+        }
+        else if (this.spinSpeed > 25) {
+          this.spinSpeed -= 10;
+        }
+        else if (this.spinSpeed > 15) {
+          this.spinSpeed -= 5;
+        }
+        else if (this.spinSpeed > 5) {
+          this.spinSpeed -= 2;
+        }
+        else {
+          this.spinSpeed -= 1;
+        }
 
-        if (this.spinSpeed < 0) {
-          this.spinSpeed = 0;
+        if (this.spinSpeed < this.minSpeed) {
+          this.spinSpeed = this.minSpeed;
         }
       }
     }, 500);
 
-
-    interval(2000).subscribe(() => {
+    interval(1000).subscribe(() => {
       if (!this.isPowerUp && Math.random() < 0.01)
       {
+        this.poewrUpIconLeft = Math.floor(Math.random() * 80);
+        this.poewrUpIconTop = Math.floor(Math.random() * 80);
         this.isPowerUpAppear = true;
         setTimeout(() => {
           this.isPowerUpAppear = false;
@@ -163,15 +194,12 @@ export class AppComponent implements OnInit {
   private lastClickTime: number = 0;
   public isPowerUp: boolean = false;
   public isPowerUpAppear: boolean = false;
-  public poewrUpIconLeft: number = 10;
-  public poewrUpIconTop: number = 40;
+  public poewrUpIconLeft: number = 0;
+  public poewrUpIconTop: number = 0;
 
-  //private clickCount = 0; // Number of clicks in the current second
-  //private lastClickTime = 0; // Time of the last click
-  private lastClickTime2: number = 0;
-  private clickInterval: number = 1000; // Initial click interval (1 second)
   private minSpeed: number = 0; // Minimum spin speed
-  private maxSpeed: number = 30; // Maximum spin speed
+  private minSpeedWithUpgrade: number = 5;
+  private maxSpeed: number = 100; // Maximum spin speed
   private spinSpeed: number = 0; // Initial spin speed
   public angle: number = 0; // Initial angle
 
@@ -186,10 +214,26 @@ export class AppComponent implements OnInit {
     {
       this.points$.next(this.points$.value + this.hand.amount + 1);
     }
-    //this.isSpinning = true;
+
     this.clickCount++;
 
-    // Thank you chat gpt for this
+
+    // Calculate click speed
+    // const currentTime = Date.now();
+    // if (this.lastClickTime !== 0) {
+    //   this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
+    //   this.spinDuration = 1 / this.clickSpeed;
+    // }
+    // this.lastClickTime = currentTime;
+
+    // setTimeout(() => {
+    //     this.clickCount--;
+    //     if (this.clickCount === 0) {
+    //         this.isSpinning = false;
+    //     }
+    // }, 1000 * this.clickCount);
+
+     // Thank you chat gpt for this
     // Create a new div element
     const newDiv = document.createElement('img');
 
@@ -216,26 +260,10 @@ export class AppComponent implements OnInit {
 
 
 
-    // Calculate click speed
-    // const currentTime = Date.now();
-    // if (this.lastClickTime !== 0) {
-    //   this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
-    //   this.spinDuration = 1 / this.clickSpeed;
-    // }
-    // this.lastClickTime = currentTime;
-
-    // setTimeout(() => {
-    //     this.clickCount--;
-    //     if (this.clickCount === 0) {
-    //         this.isSpinning = false;
-    //     }
-    // }, 1000 * this.clickCount);
-
-
-    let currentTime2 = new Date().getTime();
+    let currentTime = new Date().getTime();
 
     // If the current click is within 1 second of the last click, increment the click count
-    if (currentTime2 - this.lastClickTime < 1000) {
+    if (currentTime - this.lastClickTime < 1000) {
       this.clickCount++;
     }
     // If the current click is more than 1 second after the last click, reset the click count
@@ -244,27 +272,30 @@ export class AppComponent implements OnInit {
     }
 
     // Update the spin speed based on the click count
-    this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 80);
-    if (this.spinSpeed < 0) {
-      this.spinSpeed = 0;
+    this.spinSpeed = this.minSpeed + (this.maxSpeed - this.minSpeed) * (this.clickCount / 160);
+    if (this.spinSpeed < this.minSpeed) {
+      this.spinSpeed = this.minSpeed;
     } else if (this.spinSpeed > this.maxSpeed) {
       this.achievementService.ensureAchiement('maximum-camel-velocity');
       this.spinSpeed = this.maxSpeed;
     }
 
+    if (this.lastClickTime !== 0) {
+      this.clickSpeed = 1000 / (currentTime - this.lastClickTime);
+      if (this.clickSpeed > 75) {
+        this.achievementService.ensureAchiement('click-sonic');
+      }
+      this.spinDuration = 1 / this.clickSpeed;
+    }
+
     // Update the last click time
-    this.lastClickTime = currentTime2;
+    this.lastClickTime = currentTime;
   }
 
   private spin() {
     // Update the angle
     console.log('spinSpeed', this.spinSpeed);
     this.angle += this.spinSpeed;
-
-    //console.log('here', this.angle);
-
-    // Apply the rotation to the element
-    //spinElement.style.transform = 'rotate(' + this.angle + 'deg)';
 
     // Request the next frame
 
@@ -281,9 +312,6 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    this.poewrUpIconLeft = Math.floor(Math.random() * 80);
-    this.poewrUpIconTop = Math.floor(Math.random() * 80);
-
     this.isPowerUp = true;
 
     setTimeout(() => {
@@ -298,6 +326,16 @@ export class AppComponent implements OnInit {
     }
   }
 
+  private bootUpTheCamel() {
+    this.minSpeed = this.minSpeedWithUpgrade;
+    this.spinSpeed = this.minSpeedWithUpgrade;
+    if (this.spinSpeed < this.minSpeed) {
+      this.spinSpeed = this.minSpeed;
+    } else if (this.spinSpeed > this.maxSpeed) {
+      this.spinSpeed = this.maxSpeed;
+    }
+  }
+
   public buyHand() {
     if (this.hand.cost > this.points$.value) {
       return;
@@ -306,6 +344,9 @@ export class AppComponent implements OnInit {
     this.points$.next(this.points$.value - this.hand.cost);
     this.hand.amount++;
     this.hand.cost = Math.round(this.hand.cost * 1.15);
+
+    this.bootUpTheCamel();
+
     localStorage.setItem('handAmount', String(this.hand.amount));
     localStorage.setItem('handCost', String(this.hand.cost));
 
@@ -323,6 +364,7 @@ export class AppComponent implements OnInit {
     this.points$.next(this.points$.value - this.engineer.cost);
     this.engineer.amount++;
     this.engineer.cost += Math.round(this.engineer.cost * 1.15);
+    this.bootUpTheCamel();
     localStorage.setItem('engineerAmount', String(this.engineer.amount));
     localStorage.setItem('engineerCost', String(this.engineer.cost));
   }
@@ -335,6 +377,7 @@ export class AppComponent implements OnInit {
     this.points$.next(this.points$.value - this.ai.cost);
     this.ai.amount++;
     this.ai.cost += Math.round(this.ai.cost * 1.15);
+    this.bootUpTheCamel();
     localStorage.setItem('aiAmount', String(this.ai.amount));
     localStorage.setItem('aiCost', String(this.ai.cost));
   }
@@ -394,7 +437,7 @@ export class AppComponent implements OnInit {
     }
     if (this.isPowerUp)
     {
-      cps *= 2;
+      cps *= 4;
     }
     return cps;
   }

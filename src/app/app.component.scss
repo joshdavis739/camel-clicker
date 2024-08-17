@@ -65,6 +65,7 @@ html, body {
 
 .camel {
   z-index: 99;
+  cursor: pointer;
 }
 
 * {
@@ -299,6 +300,10 @@ color: black;
 
 .power-up-img {
   height: 8rem;
+}
+
+.power {
+  font-size: 4rem;
 }
 
 @keyframes move-background {
