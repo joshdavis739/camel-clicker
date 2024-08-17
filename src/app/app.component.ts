@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
         }
       }
     }, 500);
-  }
+
 
     interval(2000).subscribe(() => {
       if (!this.isPowerUp && Math.random() < 0.01)
@@ -114,6 +114,7 @@ export class AppComponent implements OnInit {
       }
       });
   }
+
   ngOnInit(): void {
     this.achievementService.onAchivemint.pipe(tap(x => {
       this.showAchiement$.next(true);
